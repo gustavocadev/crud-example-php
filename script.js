@@ -65,10 +65,10 @@ const renderUsers = (users) => {
     const btns = btnTextContent.map((btnText) => {
       const form = document.createElement("form");
       form.setAttribute("method", "post");
+
       const btn = document.createElement("button");
-      btn.textContent = btnText;
-      btn.value = user.id;
       btn.setAttribute("type", "submit");
+      btn.textContent = btnText;
 
       if (btnText === "Eliminar") {
         form.addEventListener("submit", async (e) => {
