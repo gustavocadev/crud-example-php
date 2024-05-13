@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+    />
+  </head>
+  <body>
+    <main class="container">
+      <form id="form">
+        <label for="">Ingrese un nombre de usuario</label>
+        <input type="text" placeholder="e.g. gustavoca" name="username" />
+        <button type="submit">Crear usuario</button>
+      </form>
+
+      <section>
+        <h3>Usuarios</h3>
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">id</th>
+              <th scope="col">Username</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </section>
+    </main>
+
+    <script>
+      const form = document.getElementById("form");
+      const tableBody = document.getElementById("tableBody");
+
+      let hasError = false;
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(form);
+        const username = formData.get("username");
+
+        if (username.trim().length === 0) {
+          hasError = true;
+          // print a error msg in the dom
+          return;
+        }
+
+        const resp = await fetch("controller.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ username }),
+        });
+        const data = await resp.json();
+
+        revalidateUsers();
+
+        form.reset();
+      });
+
+      // load users
+      addEventListener("load", async () => {
+        const users = await fetchUsers();
+
+        renderUsers(users);
+      });
+
+      const fetchUsers = async () => {
+        const resp = await fetch("controller.php");
+        const data = await resp.json();
+        return data;
+      };
+
+      const renderUsers = (users) => {
+        const fragment = document.createDocumentFragment();
+        for (const user of users) {
+          const tr = document.createElement("tr");
+
+          const td1 = document.createElement("td");
+          const td2 = document.createElement("td");
+          const td3 = document.createElement("td");
+
+          const btn = document.createElement("button");
+          btn.textContent = "Eliminar";
+
+          td1.append(user.id);
+          td2.append(user.username);
+          td3.append(btn);
+
+          tr.append(td1);
+          tr.append(td2);
+          tr.append(td3);
+          fragment.append(tr);
+        }
+
+        tableBody.append(fragment);
+      };
+
+      const revalidateUsers = async () => {
+        const users = await fetchUsers();
+
+        // remove all the previous users
+        while (tableBody.firstChild) {
+          tableBody.firstChild.remove();
+        }
+
+        // render new users
+        renderUsers(users);
+      };
+    </script>
+  </body>
+</html>
