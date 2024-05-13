@@ -71,11 +71,12 @@ const renderUsers = (users) => {
       btn.setAttribute("type", "submit");
 
       if (btnText === "Eliminar") {
-        form.addEventListener("submit", (e) => {
+        form.addEventListener("submit", async (e) => {
           e.preventDefault();
           const isConfirm = confirm("Estas seguro?");
           if (!isConfirm) return;
-          deleteUser(user.id);
+          await deleteUser(user.id);
+          revalidateUsers();
         });
       }
       if (btnText === "Actualizar") {
