@@ -54,3 +54,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
     echo json_encode($users);
 }
+
+// delete from params
+if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
+    $params = explode('/', $_SERVER['PATH_INFO']);
+    $id = $params[1];
+
+    $sql = "DELETE FROM users WHERE id = $id";
+    $result = $conn->query($sql);
+
+    if (!$result) {
+        echo json_encode(
+            array('sql' => 'Failed to delete user: ' . $conn->error)
+        );
+    }
+
+    echo json_encode(
+        array('sql' => 'User deleted successfully')
+    );
+}
