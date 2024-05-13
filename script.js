@@ -51,11 +51,43 @@ const renderUsers = (users) => {
 
     const btnTextContent = ["Eliminar", "Actualizar"];
 
+    const deleteUser = async (userId) => {
+      const resp = await fetch(`controller.php/${userId}`, {
+        method: "DELETE",
+        headers: {
+          Accept: "application/json",
+        },
+      });
+      const data = await resp.json();
+      console.log(data);
+    };
+
     const btns = btnTextContent.map((btnText) => {
+      const form = document.createElement("form");
+      form.setAttribute("method", "post");
       const btn = document.createElement("button");
-      btn.textContent = btnText
-      return btn;
-    })
+      btn.textContent = btnText;
+      btn.value = user.id;
+      btn.setAttribute("type", "submit");
+
+      if (btnText === "Eliminar") {
+        form.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const isConfirm = confirm("Estas seguro?");
+          if (!isConfirm) return;
+          deleteUser(user.id);
+        });
+      }
+      if (btnText === "Actualizar") {
+        form.addEventListener("submit", (e) => {
+          e.preventDefault();
+          alert("Actualizar: " + user.id);
+        });
+      }
+
+      form.append(btn);
+      return form;
+    });
     // btn.classList.add('')
     // btn.textContent = "Eliminar";
 
