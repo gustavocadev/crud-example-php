@@ -12,16 +12,19 @@
   <body>
     <main class="container">
       <form id="form">
-        <label for="">Username</label>
-        <input type="text" id="username" name="username" />
+        <label for="">Nombres</label>
+        <input type="text" id="name" name="name" />
 
-        <button>Actualizar username</button>
+        <label for="">Correo electronico</label>
+        <input type="text" id="email" name="email" />
+
+        <button>Actualizar datos</button>
       </form>
     </main>
 
     <script>
       // on load
-      const usernameInput = document.getElementById("username");
+      const nameInput = document.getElementById("name");
 
       addEventListener("load", async () => {
         const searchParams = new URLSearchParams(location.search);
@@ -30,7 +33,7 @@
         if (!id) return;
 
         const user = await getUserById(id);
-        usernameInput.defaultValue = user.username;
+        nameInput.defaultValue = user.username;
       });
 
       const form = document.getElementById("form");
@@ -47,9 +50,9 @@
         }
 
         const formData = new FormData(e.currentTarget);
-        const username = formData.get("username");
+        const name = formData.get("name");
 
-        if (!username) {
+        if (!name) {
           alert("No puede ser un texto vacio");
           return;
         }
@@ -65,7 +68,11 @@
           }),
         });
         const data = await resp.json();
-        location.href = "/crud-example";
+        console.log(data);
+
+        const url = new URL(location.href);
+        const currentPath = url.pathname.split("/").at(1);
+        location.href = `/${currentPath}`;
       });
 
       const getUserById = async (userId) => {
