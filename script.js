@@ -75,6 +75,7 @@ const renderUsers = (users) => {
           e.preventDefault();
           const isConfirm = confirm("Estas seguro?");
           if (!isConfirm) return;
+
           await deleteUser(user.id);
           revalidateUsers();
         });
