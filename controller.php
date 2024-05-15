@@ -37,10 +37,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 // get all users
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-    $id = (int)$_GET['id'];
-
     // catch the user by id
-    if ($id) {
+    if (isset($_GET['id'])) {
+        $id = (int)$_GET['id'];
         $sql = "SELECT * FROM users WHERE id = $id";
         $result = $conn->query($sql);
         $user = $result->fetch_assoc();
@@ -84,3 +83,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
         array('sql' => 'User deleted successfully')
     );
 }
+
+
+if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
+    $body = json_decode(file_get_contents("php://input"));
+
+    $id = $_GET['id'];
+    $username = $body->username;
+
+    $sql = "UPDATE users SET username = '$username' WHERE id = $id";
+    $result = $conn->query($sql);
+
+    if (!$result) {
+        echo json_encode(
+            array('sql' => 'Failed to update user: ' . $conn->error)
+        );
+    }
+
+    echo json_encode(
+        array('sql' => 'User updated successfully')
+    );
+};
