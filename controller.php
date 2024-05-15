@@ -89,9 +89,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
     $body = json_decode(file_get_contents("php://input"));
 
     $id = $_GET['id'];
-    $username = $body->username;
+    $name = $body->name;
 
-    $sql = "UPDATE users SET username = '$username' WHERE id = $id";
+    $sql = "UPDATE users SET username = '$name' WHERE id = $id";
     $result = $conn->query($sql);
 
     if (!$result) {
