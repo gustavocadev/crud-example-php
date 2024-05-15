@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+    />
+  </head>
+  <body>
+    <main class="container">
+      <form id="form">
+        <label for="">Username</label>
+        <input type="text" id="username" />
+
+        <button>Actualizar username</button>
+      </form>
+    </main>
+
+    <script>
+      // on load
+      const usernameInput = document.getElementById("username");
+
+      addEventListener("load", async () => {
+        const searchParams = new URLSearchParams(location.search);
+        const id = searchParams.get("id");
+        if (!id) return;
+        const user = await getUserById(id);
+        console.log(user);
+        usernameInput.defaultValue = user.username;
+      });
+
+      const form = document.getElementById("form");
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+      });
+
+      const getUserById = async (userId) => {
+        const resp = await fetch(`controller.php?id=${userId}`, {
+          method: "GET",
+        });
+        const data = await resp.text();
+        return JSON.parse(data);
+      };
+    </script>
+  </body>
+</html>
