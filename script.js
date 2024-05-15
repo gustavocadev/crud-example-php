@@ -7,9 +7,9 @@ form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const formData = new FormData(form);
-  const username = formData.get("username");
+  const name = formData.get("name");
 
-  if (username.trim().length === 0) {
+  if (name.trim().length === 0) {
     hasError = true;
     // print a error msg in the dom
     return;
@@ -20,7 +20,7 @@ form.addEventListener("submit", async (e) => {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ username }),
+    body: JSON.stringify({ name }),
   });
   const data = await resp.json();
 
@@ -83,7 +83,7 @@ const renderUsers = (users) => {
       if (btnText === "Actualizar") {
         form.addEventListener("submit", (e) => {
           e.preventDefault();
-          alert("Actualizar: " + user.id);
+          location.href = `edit.html?id=${user.id}`;
         });
       }
 
