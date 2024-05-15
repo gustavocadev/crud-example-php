@@ -13,7 +13,7 @@
     <main class="container">
       <form id="form">
         <label for="">Username</label>
-        <input type="text" id="username" />
+        <input type="text" id="username" name="username" />
 
         <button>Actualizar username</button>
       </form>
@@ -26,16 +26,46 @@
       addEventListener("load", async () => {
         const searchParams = new URLSearchParams(location.search);
         const id = searchParams.get("id");
+
         if (!id) return;
+
         const user = await getUserById(id);
-        console.log(user);
         usernameInput.defaultValue = user.username;
       });
 
       const form = document.getElementById("form");
 
-      form.addEventListener("submit", (e) => {
+      form.addEventListener("submit", async (e) => {
         e.preventDefault();
+
+        const searchParams = new URLSearchParams(location.search);
+        const id = searchParams.get("id");
+
+        if (isNaN(Number(id))) {
+          alert("El id debe ser un numero entero");
+          return;
+        }
+
+        const formData = new FormData(e.currentTarget);
+        const username = formData.get("username");
+
+        if (!username) {
+          alert("No puede ser un texto vacio");
+          return;
+        }
+
+        // PUT Method
+        const resp = await fetch(`controller.php?id=${id}`, {
+          method: "PUT",
+          headers: {
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            username,
+          }),
+        });
+        const data = await resp.json();
+        location.href = "/crud-example";
       });
 
       const getUserById = async (userId) => {
