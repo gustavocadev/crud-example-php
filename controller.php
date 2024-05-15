@@ -37,6 +37,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 // get all users
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+    $id = (int)$_GET['id'];
+
+    // catch the user by id
+    if ($id) {
+        $sql = "SELECT * FROM users WHERE id = $id";
+        $result = $conn->query($sql);
+        $user = $result->fetch_assoc();
+        echo json_encode($user);
+        return;
+    }
+
     $sql = "SELECT * FROM users";
     $result = $conn->query($sql);
 
