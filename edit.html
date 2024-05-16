@@ -24,60 +24,64 @@
 
     <script>
       // on load
-      const nameInput = document.getElementById("name");
+      const nameInput = document.getElementById('name');
+      const emailInput = document.getElementById('email');
 
-      addEventListener("load", async () => {
+      addEventListener('load', async () => {
         const searchParams = new URLSearchParams(location.search);
-        const id = searchParams.get("id");
+        const id = searchParams.get('id');
 
         if (!id) return;
 
         const user = await getUserById(id);
-        nameInput.defaultValue = user.username;
+        nameInput.defaultValue = user.name;
+        emailInput.defaultValue = user.email;
       });
 
-      const form = document.getElementById("form");
+      const form = document.getElementById('form');
 
-      form.addEventListener("submit", async (e) => {
+      form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
         const searchParams = new URLSearchParams(location.search);
-        const id = searchParams.get("id");
+        const id = searchParams.get('id');
 
         if (isNaN(Number(id))) {
-          alert("El id debe ser un numero entero");
+          alert('El id debe ser un numero entero');
           return;
         }
 
         const formData = new FormData(e.currentTarget);
-        const name = formData.get("name");
+        const name = formData.get('name');
+        const email = formData.get('email');
 
         if (!name) {
-          alert("No puede ser un texto vacio");
+          alert('No puede ser un texto vacio');
           return;
         }
 
         // PUT Method
         const resp = await fetch(`controller.php?id=${id}`, {
-          method: "PUT",
+          method: 'PUT',
           headers: {
-            Accept: "application/json",
+            Accept: 'application/json',
           },
           body: JSON.stringify({
-            username,
+            name,
+            email,
           }),
         });
         const data = await resp.json();
         console.log(data);
 
         const url = new URL(location.href);
-        const currentPath = url.pathname.split("/").at(1);
+        const currentPath = url.pathname.split('/').at(1);
         location.href = `/${currentPath}`;
       });
 
       const getUserById = async (userId) => {
         const resp = await fetch(`controller.php?id=${userId}`, {
-          method: "GET",
+          method: 'GET',
         });
         const data = await resp.text();
         return JSON.parse(data);
