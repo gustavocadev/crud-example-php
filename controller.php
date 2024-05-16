@@ -19,9 +19,10 @@ if (mysqli_connect_errno()) {
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $body = json_decode(file_get_contents("php://input"));
 
-    $username = $body->username;
+    $name = $body->name;
+    $email = $body->email;
 
-    $sql = "INSERT INTO users (username) VALUES ('$username')";
+    $sql = "INSERT INTO users (name, email) VALUES ('$name', '$email')";
     $result = $conn->query($sql);
 
     if (!$result) {
@@ -90,8 +91,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
 
     $id = $_GET['id'];
     $name = $body->name;
+    $email = $body->email;
 
-    $sql = "UPDATE users SET username = '$name' WHERE id = $id";
+    $sql = "UPDATE users SET name = '$name', email = '$email' WHERE id = $id";
     $result = $conn->query($sql);
 
     if (!$result) {
