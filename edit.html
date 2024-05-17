@@ -52,8 +52,8 @@
         }
 
         const formData = new FormData(e.currentTarget);
-        const name = formData.get('name');
-        const email = formData.get('email');
+        const name = formData.get('name') ?? '';
+        const email = formData.get('email') ?? '';
 
         if (!name) {
           alert('No puede ser un texto vacio');
@@ -75,8 +75,13 @@
         console.log(data);
 
         const url = new URL(location.href);
+
         const currentPath = url.pathname.split('/').at(1);
-        location.href = `/${currentPath}`;
+        if (currentPath) {
+          location.href = `/${currentPath}`;
+          return;
+        }
+        location.href = '/';
       });
 
       const getUserById = async (userId) => {
