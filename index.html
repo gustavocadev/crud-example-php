@@ -1,46 +1,42 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
-    />
-  </head>
-  <body>
-    <main class="container">
-      <form id="form">
-        <label for="">Ingrese el nombre completo</label>
-        <input type="text" placeholder="e.g. John Doe" name="name" />
 
-        <label for="">Correo electronico</label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          placeholder="user@example.com"
-        />
-        <button type="submit">Crear usuario</button>
-      </form>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
+</head>
 
-      <section>
-        <h3>Usuarios</h3>
-        <table>
-          <thead>
-            <tr>
-              <th scope="col">id</th>
-              <th scope="col">Nombres</th>
-              <th scope="col">Correo</th>
-              <th scope="col">Action</th>
-            </tr>
-          </thead>
-          <tbody id="tableBody"></tbody>
-        </table>
-      </section>
-    </main>
+<body>
+  <main class="container">
+    <form id="form">
+      <label for="">Ingrese el nombre completo</label>
+      <input type="text" placeholder="e.g. John Doe" name="name" />
 
-    <script src="./script.js"></script>
-  </body>
+      <label for="">Correo electronico</label>
+      <input type="email" id="email" name="email" placeholder="user@example.com" />
+      <button type="submit">Crear usuario</button>
+    </form>
+
+    <section>
+      <h3>Usuarios</h3>
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">id</th>
+            <th scope="col">Nombres</th>
+            <th scope="col">Correo</th>
+            <th scope="col">Fecha de creación</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="./script.js"></script>
+</body>
+
 </html>
