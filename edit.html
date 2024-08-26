@@ -1,96 +1,96 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
-    />
-  </head>
-  <body>
-    <main class="container">
-      <form id="form">
-        <label for="">Nombres</label>
-        <input type="text" id="name" name="name" />
 
-        <label for="">Correo electronico</label>
-        <input type="text" id="email" name="email" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
+</head>
 
-        <button>Actualizar datos</button>
-      </form>
-    </main>
+<body>
+  <main class="container">
+    <form id="form">
+      <label for="">Nombres</label>
+      <input type="text" id="name" name="name" />
 
-    <script>
-      // on load
-      const nameInput = document.getElementById('name');
-      const emailInput = document.getElementById('email');
+      <label for="">Correo electronico</label>
+      <input type="text" id="email" name="email" />
 
-      addEventListener('load', async () => {
-        const searchParams = new URLSearchParams(location.search);
-        const id = searchParams.get('id');
+      <button>Actualizar datos</button>
+    </form>
+  </main>
 
-        if (!id) return;
+  <script>
+    // on load
+    const nameInput = document.getElementById('name');
+    const emailInput = document.getElementById('email');
 
-        const user = await getUserById(id);
-        nameInput.defaultValue = user.name;
-        emailInput.defaultValue = user.email;
+    addEventListener('load', async () => {
+      const searchParams = new URLSearchParams(location.search);
+      const id = searchParams.get('id');
+
+      if (!id) return;
+
+      const user = await getUserById(id);
+      nameInput.defaultValue = user.name;
+      emailInput.defaultValue = user.email;
+    });
+
+    const form = document.getElementById('form');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const searchParams = new URLSearchParams(location.search);
+      const id = searchParams.get('id');
+
+      if (isNaN(Number(id))) {
+        alert('El id debe ser un numero entero');
+        return;
+      }
+
+      const formData = new FormData(e.currentTarget);
+      const name = formData.get('name') ?? '';
+      const email = formData.get('email') ?? '';
+
+      if (!name) {
+        alert('No puede ser un texto vacio');
+        return;
+      }
+
+      // PUT Method
+      const resp = await fetch(`controller.php?id=${id}`, {
+        method: 'PUT',
+        headers: {
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          name,
+          email,
+        }),
       });
+      const data = await resp.json();
+      console.log(data);
 
-      const form = document.getElementById('form');
+      const url = new URL(location.href);
 
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault();
+      // const currentPath = url.pathname.split('/').at(1);
+      // if (currentPath) {
+      //   location.href = `/${currentPath}`;
+      //   return;
+      // }
+      location.href = '/';
+    });
 
-        const searchParams = new URLSearchParams(location.search);
-        const id = searchParams.get('id');
-
-        if (isNaN(Number(id))) {
-          alert('El id debe ser un numero entero');
-          return;
-        }
-
-        const formData = new FormData(e.currentTarget);
-        const name = formData.get('name') ?? '';
-        const email = formData.get('email') ?? '';
-
-        if (!name) {
-          alert('No puede ser un texto vacio');
-          return;
-        }
-
-        // PUT Method
-        const resp = await fetch(`controller.php?id=${id}`, {
-          method: 'PUT',
-          headers: {
-            Accept: 'application/json',
-          },
-          body: JSON.stringify({
-            name,
-            email,
-          }),
-        });
-        const data = await resp.json();
-        console.log(data);
-
-        const url = new URL(location.href);
-
-        const currentPath = url.pathname.split('/').at(1);
-        if (currentPath) {
-          location.href = `/${currentPath}`;
-          return;
-        }
-        location.href = '/';
+    const getUserById = async (userId) => {
+      const resp = await fetch(`controller.php?id=${userId}`, {
+        method: 'GET',
       });
+      const data = await resp.text();
+      return JSON.parse(data);
+    };
+  </script>
+</body>
 
-      const getUserById = async (userId) => {
-        const resp = await fetch(`controller.php?id=${userId}`, {
-          method: 'GET',
-        });
-        const data = await resp.text();
-        return JSON.parse(data);
-      };
-    </script>
-  </body>
 </html>
