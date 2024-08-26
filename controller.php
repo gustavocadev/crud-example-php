@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $email = $body->email;
 
   $sql = "INSERT INTO users (name, email) VALUES ('$name', '$email')";
-  $result = $conn->query($sql);
+  $result = mysqli_query($conn, $sql);
 
   if (!$result) {
     echo json_encode([
@@ -54,23 +54,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $id = (int)$_GET['id'];
     $sql = "SELECT * FROM users WHERE id = $id";
     $result = $conn->query($sql);
-    $user = $result->fetch_assoc();
+    $user = mysqli_fetch_assoc($result);
     echo json_encode($user);
     return;
   }
 
   $sql = "SELECT * FROM users";
-  $result = $conn->query($sql);
+  $result = mysqli_query($conn, $sql);
 
   if (!$result) {
     echo json_encode([
       'msg' => 'Failed to get users: ' . $conn->error
     ]);
-  }
+  };
 
   $users = [];
 
-  while ($row = $result->fetch_assoc()) {
+  while ($row = mysqli_fetch_assoc($result)) {
     // ugly way to push to an array
     // $users[] = $row;
 
@@ -87,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
   $id = $params[1];
 
   $sql = "DELETE FROM users WHERE id = $id";
-  $result = $conn->query($sql);
+  $result = mysqli_query($conn, $sql);
 
   if (!$result) {
     echo json_encode(
@@ -109,11 +109,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
   $email = $body->email;
 
   $sql = "UPDATE users SET name = '$name', email = '$email' WHERE id = $id";
-  $result = $conn->query($sql);
+  $result = mysqli_query($conn, $sql);
 
   if (!$result) {
     echo json_encode([
-      'msg' => 'Failed to update user: ' . $conn->error
+      'msg' => 'Failed to update user: ' . mysqli_error($conn)
     ]);
   }
 
